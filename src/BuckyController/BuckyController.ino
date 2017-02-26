@@ -42,6 +42,7 @@ float encoder3Speed = 0;
 
 unsigned long tPeriod = 0;
 unsigned long tOld = 0;
+unsigned long tCurrent = 0;
 
 int dir[2];
 int pwm[2];
@@ -108,8 +109,9 @@ void setup()
 }
 
 void loop() {
-    tPeriod = millis() - tOld;
-    tOld = millis();
+    tCurrent = millis();
+    tPeriod = tCurrent - tOld;
+    tOld = tCurrent;
 
     encoder1Speed = (encoder1Ticks - encoder1TicksOld)*1000*2*3.14/(tPeriod*7.0);
     encoder1TicksOld = encoder1Ticks;
