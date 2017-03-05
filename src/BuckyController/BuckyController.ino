@@ -8,19 +8,19 @@
 
 #define ENCODER2_INTERRUPT 1
 #define ENCODER2_PIN_A 3
-#define ENCODER2_PIN_B 5
+#define ENCODER2_PIN_B 7
 #define ENCODER2_REVERSED
 
 #define ENCODER3_INTERRUPT 2
 #define ENCODER3_PIN_A 21
-#define ENCODER3_PIN_B 6
+#define ENCODER3_PIN_B 8
 #define ENCODER3_REVERSED
 
-#define PWM1_PIN 7
-#define DIR1_PIN 8
+#define PWM1_PIN 5
+#define DIR1_PIN 6
 
-#define PWM2_PIN 9
-#define DIR2_PIN 10
+#define PWM2_PIN 10
+#define DIR2_PIN 8
 
 #define PWM3_PIN 11
 #define DIR3_PIN 12
@@ -44,8 +44,10 @@ unsigned long tPeriod = 0;
 unsigned long tOld = 0;
 unsigned long tCurrent = 0;
 
-int dir[2];
-int pwm[2];
+unsigned int dirc[3] = {0,0,0};
+unsigned int pwm[3] = {0,0,0};
+unsigned int dumpVar = 0;
+
 
 void HandleEncoder1InterruptA()
 {
@@ -123,9 +125,8 @@ void loop() {
     encoder3TicksOld = encoder3Ticks;
 
     while(Serial.available() < 6);
-
     for(int i = 0; i < 3; i++){
-      dir[i] = Serial.read();
+      dirc[i] = Serial.read();
     }
 
     for(int i = 0; i < 3; i++){
@@ -138,13 +139,13 @@ void loop() {
     Serial.print(", ");
     Serial.println(encoder3Speed);
 
-    digitalWrite(DIR1_PIN, dir[0]);
+    digitalWrite(DIR1_PIN, dirc[0]);
     analogWrite(PWM1_PIN, pwm[0]);
 
-    digitalWrite(DIR2_PIN, dir[1]);
+    digitalWrite(DIR2_PIN, dirc[1]);
     analogWrite(PWM2_PIN, pwm[1]);
 
-    digitalWrite(DIR3_PIN, dir[2]);
+    digitalWrite(DIR3_PIN, dirc[2]);
     analogWrite(PWM3_PIN, pwm[2]);
 
     delay(2);
